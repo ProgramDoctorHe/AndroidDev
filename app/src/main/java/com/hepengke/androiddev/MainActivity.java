@@ -1,12 +1,15 @@
 package com.hepengke.androiddev;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -17,36 +20,51 @@ import com.hepengke.androiddev.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-	private AppBarConfiguration appBarConfiguration;
-	private ActivityMainBinding binding;
+    private AppBarConfiguration appBarConfiguration;
+    private ActivityMainBinding binding;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        goNextActivity();
+    }
 
-		binding = ActivityMainBinding.inflate(getLayoutInflater());
-		setContentView(binding.getRoot());
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
 
-		setSupportActionBar(binding.toolbar);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-		appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-		NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        setSupportActionBar(binding.toolbar);
 
-		binding.fab.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-						.setAnchorView(R.id.fab)
-						.setAction("Action", null).show();
-			}
-		});
-	}
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
-	@Override
-	public boolean onSupportNavigateUp() {
-		NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
-		return NavigationUI.navigateUp(navController, appBarConfiguration)
-				|| super.onSupportNavigateUp();
-	}
+        binding.fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAnchorView(R.id.fab)
+                        .setAction("Action", null).show();
+            }
+        });
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
+    }
+    private Runnable mGoNext = () -> {
+        startActivity(new Intent(MainActivity.this, Main2Activity.class));
+    };
+
+    private void goNextActivity() {
+        TextView goNextActivity = findViewById(R.id.goToNextActvitiy);
+        goNextActivity.setText("3秒后跳转到第二个Activity");
+        new Handler().postDelayed(mGoNext, 3000);
+    }
 }

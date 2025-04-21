@@ -6,4 +6,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="welcome">Welcome Punk!</string>>
+    <string name="fab_description">Fab</string>
+    <string name="next_activity">Next Activity</string>
 </resources>
